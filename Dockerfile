@@ -37,6 +37,9 @@ RUN mkdir -p /var/www/html/bootstrap/cache \
 # Install composer dependencies
 RUN composer install --no-dev --optimize-autoloader --no-scripts
 
+# Copy .env.example to .env
+RUN cp .env.example .env
+
 # Run artisan commands
 RUN php artisan package:discover --ansi
 
