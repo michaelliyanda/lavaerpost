@@ -62,4 +62,8 @@ RUN echo '<Directory /var/www/html/public>\n\
 
 EXPOSE 80
 
-CMD ["apache2-foreground"]
+# Create startup script
+RUN echo '#!/bin/bash\nphp artisan migrate --force\napache2-foreground' > /start.sh \
+    && chmod +x /start.sh
+
+CMD ["/start.sh"]
