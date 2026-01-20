@@ -4,5 +4,5 @@ set -e
 # Run migrations
 php artisan migrate --force
 
-# Start Apache
-exec apache2-foreground
+# Start PHP built-in server
+exec php artisan serve --host=0.0.0.0 --port=8080
