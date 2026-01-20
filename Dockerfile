@@ -28,8 +28,20 @@ WORKDIR /var/www/html
 # Copy application files
 COPY . /var/www/html
 
+# Create required directories
+RUN mkdir -p /var/www/html/bootstrap/cache \
+    && mkdir -p /var/www/html/storage/framework/sessions \
+    && mkdir -p /var/www/html/storage/framework/views \
+    && mkdir -p /var/www/html/storage/framework/cache \
+    && mkdir -p /var/www/html/storage/logs \
+    && chmod -R 777 /var/www/html/bootstrap/cache \
+    && chmod -R 777 /var/www/html/storage
+
 # Install composer dependencies
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader --no-scripts
+
+# Run artisan commands
+RUN php artisan package:discover --ansi
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html \
