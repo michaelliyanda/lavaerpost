@@ -62,8 +62,8 @@ RUN echo '<Directory /var/www/html/public>\n\
 
 EXPOSE 80
 
-# Create startup script
-RUN echo '#!/bin/bash\nphp artisan migrate --force\napache2-foreground' > /start.sh \
-    && chmod +x /start.sh
+# Copy and setup entrypoint script
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
-CMD ["/start.sh"]
+CMD ["/docker-entrypoint.sh"]
