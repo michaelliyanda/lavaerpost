@@ -19,8 +19,11 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Fix Apache MPM configuration and enable mod_rewrite
-RUN a2dismod mpm_event && a2enmod mpm_prefork && a2enmod rewrite
+# Fix Apache MPM configuration - remove all MPM modules and enable only prefork
+RUN rm -f /etc/apache2/mods-enabled/mpm_*.conf /etc/apache2/mods-enabled/mpm_*.load \
+    && ln -sf /etc/apache2/mods-available/mpm_prefork.conf /etc/apache2/mods-enabled/ \
+    && ln -sf /etc/apache2/mods-available/mpm_prefork.load /etc/apache2/mods-enabled/ \
+    && a2enmod rewrite
 
 # Set working directory
 WORKDIR /var/www/html
